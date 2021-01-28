@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Box, Avatar, TextField } from '@material-ui/core';
+import { Button, Avatar, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { initChat, sendMessage } from '../../store/reducers/chat';
 
@@ -24,8 +24,7 @@ const useStyles = makeStyles((theme) => ({
     height: '500px',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-end',
-    // overflowY: 'scroll',
+    overflowY: 'auto',
     backgroundColor: '#ffffff',
     padding: '24px',
     boxShadow: 'inset 0px -2px 3px #efefef'
@@ -72,13 +71,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ChatBubble = (props) => {
-  const { history } = props;
+  const { history, index } = props;
   const classes = useStyles();
   const isBot = history.from === 'bot';
 
   return (
-    <div className={isBot ? `${classes.bubbleBot}` : `${classes.bubbleUser}`}>
-      <Avatar alt={history.from} src={isBot ? '/static/images/avatar/1.jpg'  : '/static/images/avatar/2.jpg'}/>
+    <div className={isBot ? `${classes.bubbleBot}` : `${classes.bubbleUser}`} style={ index === 0 ? { marginTop:'auto'} : {}}>
+      <Avatar alt={history.from} src={isBot ? '/img/bot.png' : '/img/user.png'}/>
       <p className={isBot ? `${classes.messageBot}` : `${classes.messageUser}`}>{history.message}</p>
     </div>
   )
@@ -116,9 +115,15 @@ export const Chat = () => {
     }
   };
 
+  const messagesEndRef = React.createRef();
+
   useEffect(() => {
     dispatch(initChat());
   }, []);
+
+  useEffect(() => {
+    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory]);
 
   return (
     <div className={classes.root}>
@@ -126,8 +131,9 @@ export const Chat = () => {
       <div className={classes.form}>
         <div className={classes.layout}>
           {chatHistory.map((history, index) => {
-            return <ChatBubble key={index} history={history}/>
+            return <ChatBubble key={index} index={index} history={history}/>
           })}
+          <div ref={messagesEndRef}/>
         </div>
         <div className={classes.actionWrapper}>
           <TextField
