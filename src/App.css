@@ -30,7 +30,7 @@
 
 .App-body {
   position: relative;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 48px);
 }
 
 @keyframes App-logo-spin {

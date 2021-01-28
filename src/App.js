@@ -1,12 +1,11 @@
 import './App.css';
+import { Header } from './components/header';
 import { Chat } from './components/chat';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p className="m-0">Cognigy Chat</p>
-      </header>
+      <Header/>
       <div className="App-body">
         <Chat/>
       </div>
